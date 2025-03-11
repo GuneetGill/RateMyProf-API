@@ -1,2 +1,4 @@
 venv
 chromedriver
+.env
+postgres-db-local.session.sql

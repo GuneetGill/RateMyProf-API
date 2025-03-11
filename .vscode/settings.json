@@ -1,0 +1,14 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "rmp-db.cj2ui8aso5vf.us-west-2.rds.amazonaws.com",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "postgres-db-local",
+            "username": "postgres",
+            "database": "postgres",
+            "password": "Shimmer146$"
+        }
+    ]
+}

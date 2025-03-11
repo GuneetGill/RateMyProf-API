@@ -12,7 +12,6 @@ import database
 from selenium.webdriver.chrome.options import Options
 
 
-#Helper funcitons 
 def close_popup(driver):
     """
     Closes the popup if it appears on the page.
@@ -29,6 +28,7 @@ def close_popup(driver):
         print("Popup closed successfully!")
     except:
         print("no popup found")
+
 
 def append_prof_id_db(soup):
     """
@@ -97,11 +97,12 @@ def load_profs(url):
         updated_html = driver.page_source  # Use the page source from Selenium after clicking
         soup = BeautifulSoup(updated_html, 'html.parser') 
         
-        #now that all the profs are loaded onto the screen put all of them into db 
+        #now that all the profs are loaded onto the screen put all of them into list
         append_prof_id_db(soup)
         
     else:
         print(f"Failed to retrieve the page. Status code: {response.status_code}")
+
 
 
 print("starting ")
@@ -110,9 +111,11 @@ chrome_options.add_argument("--headless=new")
 service = Service(executable_path="./chromedriver") 
 driver = webdriver.Chrome(service=service, options=chrome_options)
 
+# different school campus
 # url = 'https://www.ratemyprofessors.com/search/professors/1482?q=*' #burnaby 
 # url = 'https://www.ratemyprofessors.com/search/professors/4267?q=*' #surrey
 url = 'https://www.ratemyprofessors.com/search/professors/5788?q=*' #vancouver 
+
 # List to store the professor IDs (numbers after /professor/)
 professor_ids = set()
 
