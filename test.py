@@ -8,18 +8,19 @@ from selenium.webdriver.chrome.options import Options
 import os
 from dotenv import load_dotenv
 import psycopg2
+import database
 
 # # PostgreSQL connection details
 
-# # Load environment variables from .env file
-# load_dotenv()
+# Load environment variables from .env file
+load_dotenv()
 
-# # Get database credentials from environment variables
-# DB_NAME = os.getenv("DB_NAME")
-# DB_USER = os.getenv("DB_USER")
-# DB_PASSWORD = os.getenv("DB_PASSWORD")
-# DB_HOST = os.getenv("DB_HOST")
-# DB_PORT = os.getenv("DB_PORT")
+# Get database credentials from environment variables
+DB_NAME = os.getenv("DB_NAME")
+DB_USER = os.getenv("DB_USER")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_HOST = os.getenv("DB_HOST")
+DB_PORT = os.getenv("DB_PORT")
 
 
 # # db = psycopg2.connect(
@@ -73,4 +74,36 @@ import psycopg2
 #         print(link[0]) 
 
 # get_links()
+def get_prof_id():
+    """Retrieves all prof id's from the database."""
+    
+    prof_id = []  # Initialize an empty list to store prof id 
 
+    try:
+        db = psycopg2.connect(
+            dbname=DB_NAME,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            host=DB_HOST,
+            port=DB_PORT
+        )
+       
+        cursor = db.cursor()
+
+        # Correct SQL query to get all links
+        cursor.execute("SELECT prof_id FROM webpages;")
+        prof_id = cursor.fetchall()
+        
+        db.commit()
+        print("Got prof id's successfully!")
+
+    except Exception as e:
+        print(f"Error getting prof id from database: {e}")
+        db.rollback()
+    finally:
+        if cursor:
+            cursor.close()
+
+    return [id[0] for id in prof_id]
+
+print(get_prof_id())

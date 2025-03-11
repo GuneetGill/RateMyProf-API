@@ -196,6 +196,36 @@ def get_links():
 
     return [link[0] for link in webpage_links]
 
+def get_prof_id():
+    """Retrieves all prof id's from the database."""
+    global connection_pool
+    prof_id = []  # Initialize an empty list to store prof id 
+
+    try:
+        # Get a connection from the pool
+        db = connection_pool.getconn()
+        cursor = db.cursor()
+
+        # Correct SQL query to get all links
+        cursor.execute("SELECT prof_id FROM webpages;")
+        prof_id = cursor.fetchall()
+        
+        db.commit()
+        print("Got prof id's successfully!")
+
+    except Exception as e:
+        print(f"Error getting prof id from database: {e}")
+        db.rollback()
+    finally:
+        if cursor:
+            cursor.close()
+        if db:
+            # Release the connection back to the pool
+            release_connection(db)
+
+    return [id[0] for id in prof_id]
+
+
 
 def close_pool():
     """Close all connections in the pool."""

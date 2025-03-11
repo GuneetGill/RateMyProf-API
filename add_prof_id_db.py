@@ -36,7 +36,11 @@ def append_prof_id_db(soup):
 
     Parameters:
     - soup: BeautifulSoup object containing the parsed page content.
+    
+    return set of prof is's 
     """
+    professor_ids = set()
+    
     # Find all professor cards
     professor_cards = soup.find_all('a', class_='TeacherCard__StyledTeacherCard-syjs0d-0 dLJIlx')
 
@@ -52,6 +56,7 @@ def append_prof_id_db(soup):
             professor_ids.add(professor_id) 
             
     print(len(professor_ids))
+    return professor_ids
 
 
 def load_profs(url):
@@ -98,31 +103,40 @@ def load_profs(url):
         soup = BeautifulSoup(updated_html, 'html.parser') 
         
         #now that all the profs are loaded onto the screen put all of them into list
-        append_prof_id_db(soup)
+        return append_prof_id_db(soup)
         
     else:
         print(f"Failed to retrieve the page. Status code: {response.status_code}")
+        #return empty set if fails 
+        return set()
 
+'''
+we run this script when first trying to populate the database 
+'''
+if __name__ == "__main__":
+    print("starting ")
+    chrome_options = Options()
+    chrome_options.add_argument("--headless=new")
+    service = Service(executable_path="./chromedriver") 
+    driver = webdriver.Chrome(service=service, options=chrome_options)
+    
+    #all 3 campus school url's 
+    school_urls = ['https://www.ratemyprofessors.com/search/professors/1482?q=*','https://www.ratemyprofessors.com/search/professors/4267?q=*','https://www.ratemyprofessors.com/search/professors/5788?q=*' ]
 
+    # all current profs within the database
+    current_profs = set(database.get_prof_id())
 
-print("starting ")
-chrome_options = Options()
-chrome_options.add_argument("--headless=new")
-service = Service(executable_path="./chromedriver") 
-driver = webdriver.Chrome(service=service, options=chrome_options)
-
-# different school campus
-# url = 'https://www.ratemyprofessors.com/search/professors/1482?q=*' #burnaby 
-# url = 'https://www.ratemyprofessors.com/search/professors/4267?q=*' #surrey
-url = 'https://www.ratemyprofessors.com/search/professors/5788?q=*' #vancouver 
-
-# List to store the professor IDs (numbers after /professor/)
-professor_ids = set()
-
-load_profs(url)
-#add profs to database 
-database.insert_prof_links(professor_ids)
-
-
-driver.quit()
+    for url in school_urls:
+        #gives us a set of all the prof for each campus the most recent info 
+        latest_professor_ids = load_profs(url)
+        #compare to make sure we have no duplicates between current and new data
+        unique_professor_ids = latest_professor_ids - current_profs
+        
+        if unique_professor_ids:
+            #add only unique profs to database 
+            database.insert_prof_links(unique_professor_ids)
+        else:
+            print("No new professors found.")
+    
+    driver.quit()
 
