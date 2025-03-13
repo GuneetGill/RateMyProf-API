@@ -1,15 +1,18 @@
 '''
-Initally populate prod_id's and webpage links to table within database.
+Populate prod_id's and webpage links to table within database.
 '''
 import requests
 from bs4 import BeautifulSoup
-from web_scraper import * 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 import time 
 from bs4 import BeautifulSoup
 import database 
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+
 
 
 def close_popup(driver):
@@ -112,6 +115,7 @@ def load_profs(url):
 
 '''
 we run this script when first trying to populate the database 
+we can also run this script many times to see if new prof's were added
 '''
 if __name__ == "__main__":
     print("starting ")

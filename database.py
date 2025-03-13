@@ -91,7 +91,7 @@ def initialize_database():
             # Release the connection back to the pool
             release_connection(db)
 
-def insert_prof_links(prof_id_dict):
+def insert_prof_links(prof_id_list):
     """Inserts professor IDs and links into the database."""
     global connection_pool
     try:
@@ -99,16 +99,16 @@ def insert_prof_links(prof_id_dict):
         db = connection_pool.getconn()
         cursor = db.cursor()
 
-        for key in prof_id_dict:
+        for item in prof_id_list:
             time.sleep(random.uniform(0.5, 1.5))  # Random delay to avoid detection
-            prof_link = f"https://www.ratemyprofessors.com/professor/{key}"
+            prof_link = f"https://www.ratemyprofessors.com/professor/{item}"
 
             # Check if prof_id exists
-            cursor.execute("SELECT prof_id FROM webpages WHERE prof_id = %s", (key,))
+            cursor.execute("SELECT prof_id FROM webpages WHERE prof_id = %s", (item,))
             existing_prof_id = cursor.fetchone()
 
             if not existing_prof_id:
-                cursor.execute("INSERT INTO webpages(prof_id, link) VALUES (%s, %s)", (key, prof_link))
+                cursor.execute("INSERT INTO webpages(prof_id, link) VALUES (%s, %s)", (item, prof_link))
 
         db.commit()
         print("Professor links inserted successfully!")

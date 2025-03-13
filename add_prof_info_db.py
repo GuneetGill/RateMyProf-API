@@ -1,6 +1,5 @@
 import requests
 from bs4 import BeautifulSoup
-from web_scraper import * 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from bs4 import BeautifulSoup
@@ -134,6 +133,8 @@ Sets up the Selenium webdriver with headless mode (for background operation),
 initializes the required components, and calls the main function to start the scraping process.
 Ensures proper cleanup by closing the database connection pool and quitting the webdriver
 when the scraping is complete. This provides clean entry and exit points for the application.
+
+we can also run thiss script many times to get the latest most up to date info for each prof 
 '''
 if __name__ == "__main__":
     print("starting ")
