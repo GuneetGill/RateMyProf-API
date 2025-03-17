@@ -3,9 +3,14 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from bs4 import BeautifulSoup
-from selenium.webdriver.chrome.options import Options
-import database
 import concurrent.futures
+from selenium.webdriver.chrome.options import Options
+import sys
+from pathlib import Path
+
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+
+from database import database
 '''
 File Overview: 
 This script scrapes professor information from RateMyProfessors.com using multithreading to improve efficiency.
@@ -23,7 +28,6 @@ Key components:
 - Database operations with connection pooling to maintain ACID properties 
 - Error handling and data validation
 '''
-
 
 def main():
      # Initialize the connection pool

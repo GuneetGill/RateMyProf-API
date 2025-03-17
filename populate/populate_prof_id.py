@@ -7,13 +7,17 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 import time 
 from bs4 import BeautifulSoup
-import database 
+import database.database as database 
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+import sys
+from pathlib import Path
 
+sys.path.append(str(Path(__file__).resolve().parent.parent))
 
+from database import database
 
 def close_popup(driver):
     """
